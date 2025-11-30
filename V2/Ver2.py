@@ -11,7 +11,6 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 import joblib
 
 # 1. Load Dataset
-# Note: I kept your specific file path.
 csv_path = r"C:\Users\Ryan.H\.cache\kagglehub\datasets\ouzgrer\diabetes\versions\1\diabetes.csv"
 
 try:
@@ -21,7 +20,7 @@ except FileNotFoundError:
     print("Error: File not found. Please check the path.")
     exit()
 
-# 2. Preprocessing
+# 2. Preprocessing/Data Cleaning
 target_column = "Outcome"
 X = df.drop(columns=[target_column])
 y = df[target_column]
@@ -33,15 +32,19 @@ for col in zero_as_missing:
     if col in X.columns:
         X[col] = X[col].replace(0, np.nan)
 
-# Split data
+# Split data into train and test
+# Reason for not splitting data into Test,Train,Validation is due to small sample size
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.20, random_state=42, stratify=y
 )
 
 # 3. Create Pipeline
 pipeline = Pipeline([
+    # Imputer: Fills the NaNs with Median
     ("imputer", SimpleImputer(strategy="median")),  # Fill missing NaNs with Median
+    # Scaler: Standardizes features (mean=0, variance=1).
     ("scaler", StandardScaler()),                   # Scale features (Good practice)
+    # The Model: Random Forest is an ensemble of Decision Trees.
     ("clf", RandomForestClassifier(random_state=42)) # The Model
 ])
 
@@ -54,6 +57,9 @@ param_grid = {
 }
 
 # cv=5 means 5-Fold Cross Validation
+# cv=5: Splits the TRAINING data into 5 smaller chunks (folds).
+# It trains on 4 chunks and validates on the 5th. It repeats this 5 times.
+# This proves the model works generally, not just on one lucky split of data.
 grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
 grid_search.fit(X_train, y_train)
 
@@ -69,8 +75,11 @@ print("\n--- Confusion Matrix ---")
 print(confusion_matrix(y_test, y_pred))
 
 print("\n--- Classification Report ---")
+# Precision: Of all predicted positive, how many were actually positive?
+# Recall: Of all actual positive, how many did we catch?
 print(classification_report(y_test, y_pred, zero_division=0))
 
+# A score of 0.5 is random guessing. 1.0 is perfect.
 roc_score = roc_auc_score(y_test, y_proba)
 print(f"ROC AUC Score: {roc_score:.4f}")
 
