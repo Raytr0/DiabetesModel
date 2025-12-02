@@ -14,7 +14,7 @@ Validation: It uses 5-fold cross-validation during the search to ensure the resu
 
 # 1. Load model
 try:
-    model = joblib.load("diabetes_best_model.joblib")
+    model = joblib.load("diabetes_xgboost_model.joblib")
     print("Model loaded successfully.\n")
 except FileNotFoundError:
     print("Error: 'diabetes_best_model.joblib' not found.")
