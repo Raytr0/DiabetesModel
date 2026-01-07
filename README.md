@@ -85,8 +85,5 @@ To run the models in this repository, you will need **Python 3.x** and the follo
 
     python filename.py
 
-## Authors
-* **Raytr0**
-
 ## License
 This project is open-source and available under the [MIT License](https://opensource.org/licenses/MIT).
