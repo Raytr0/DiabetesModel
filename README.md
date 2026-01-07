@@ -1,7 +1,7 @@
 # Diabetes Prediction Model
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
-![Status](https://img.shields.io/badge/Status-Active-green)
+![Status](https://img.shields.io/badge/Status-Completed-green)
 
 ## Overview
 This project implements a machine learning solution designed to predict the likelihood of diabetes in patients based on diagnostic metrics. The repository contains multiple iterations of the model, allowing for a comparison of different approaches, feature engineering techniques, and model performance improvements over time.
